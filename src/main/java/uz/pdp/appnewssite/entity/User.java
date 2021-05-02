@@ -55,7 +55,7 @@ public class User extends AbstractEntity implements UserDetails {
         return permission.name();
         }
         });
-         } */
+         }*/
         for (Permission permission : permissionList) {
             grantedAuthorityList.add(new SimpleGrantedAuthority(permission.name()));
         }

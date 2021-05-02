@@ -24,6 +24,4 @@ public class Post extends AbstractEntity {
 
     @Column(nullable = false)
     private String url;
-
-
 }

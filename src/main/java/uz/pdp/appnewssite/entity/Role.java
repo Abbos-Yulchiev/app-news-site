@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import uz.pdp.appnewssite.entity.enums.RoleNames;
 import uz.pdp.appnewssite.entity.enums.Permission;
 import uz.pdp.appnewssite.entity.template.AbstractEntity;
 
@@ -24,4 +23,7 @@ public class Role extends AbstractEntity {
     @Enumerated(value = EnumType.STRING)
     @ElementCollection
     private List<Permission> permissionList;
+
+    @Column(columnDefinition = "text", length = 500)
+    private String description;
 }

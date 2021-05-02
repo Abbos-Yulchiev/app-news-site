@@ -2,6 +2,7 @@ package uz.pdp.appnewssite.component;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import uz.pdp.appnewssite.entity.Role;
 import uz.pdp.appnewssite.entity.User;
@@ -19,10 +20,13 @@ public class DataLoader implements CommandLineRunner {
 
     final UserRepository userRepository;
     final RoleRepository roleRepository;
+    final PasswordEncoder passwordEncoder;
 
-    public DataLoader(UserRepository userRepository, RoleRepository roleRepository) {
+    public DataLoader(UserRepository userRepository, RoleRepository roleRepository,
+                      PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Value("${spring.datasource.initialization-mode}")
@@ -35,24 +39,26 @@ public class DataLoader implements CommandLineRunner {
             Permission[] permissionList = Permission.values();
             Role admin = roleRepository.save(new Role(
                     AppConstants.ADMIN,
-                    Arrays.asList(permissionList)
+                    Arrays.asList(permissionList),
+                    "Admin is the owner of the system"
             ));
             Role user = roleRepository.save(new Role(
                     AppConstants.USER,
-                    Arrays.asList(ADD_COMMENT, EDIT_COMMENT, DELETE_MY_COMMENT)
+                    Arrays.asList(ADD_COMMENT, EDIT_COMMENT, DELETE_MY_COMMENT),
+                    "Just user "
             ));
 
             userRepository.save(new User(
                     "Admin",
                     "admin",
-                    "admin123",
+                    passwordEncoder.encode("admin123"),
                     admin,
                     true
             ));
             userRepository.save(new User(
                     "User",
                     "user",
-                    "user123",
+                    passwordEncoder.encode("user123"),
                     user,
                     true
             ));
