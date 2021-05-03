@@ -58,7 +58,7 @@ public class CommentService {
             return new ApiResponse("Invalid comment Id!", false);
 
         User creator = optionalComment.get().getCreatedBy();
-        if (!creator.equals(user))
+        if (!creator.getId().equals(user.getId()))
             return new ApiResponse("This is not your comment!", false);
         commentRepository.deleteById(commentId);
         return new ApiResponse("Comment deleted!", false);
