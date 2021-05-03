@@ -1,8 +1,10 @@
 package uz.pdp.appnewssite.service;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import uz.pdp.appnewssite.entity.Comment;
 import uz.pdp.appnewssite.entity.Post;
+import uz.pdp.appnewssite.entity.User;
 import uz.pdp.appnewssite.payload.ApiResponse;
 import uz.pdp.appnewssite.payload.CommentDTO;
 import uz.pdp.appnewssite.repository.CommentRepository;
@@ -50,9 +52,14 @@ public class CommentService {
 
     public ApiResponse deleteMyComment(Long commentId) {
 
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         if (!optionalComment.isPresent())
             return new ApiResponse("Invalid comment Id!", false);
+
+        User creator = optionalComment.get().getCreatedBy();
+        if (!creator.equals(user))
+            return new ApiResponse("This is not your comment!", false);
         commentRepository.deleteById(commentId);
         return new ApiResponse("Comment deleted!", false);
     }
