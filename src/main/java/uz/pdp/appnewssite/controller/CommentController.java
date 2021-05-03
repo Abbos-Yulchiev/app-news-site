@@ -47,8 +47,8 @@ public class CommentController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
-    // Deleting own comment
-    @PreAuthorize(value = "hasAnyAuthority('DELETE_MY_COMMENT')")
+    // Deleting ow comment
+    @PreAuthorize(value = "hasAuthority('DELETE_MY_COMMENT')")
     @DeleteMapping(value = "/myComment/{commentId}")
     public HttpEntity<?> deleteMyComment(@PathVariable Long commentId) {
 
